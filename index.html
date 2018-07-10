@@ -50,6 +50,7 @@
         var crossorigin = document.getElementById("crossorigin");
         var SearchApi = {
             googleSuggested : function (res){
+                console.log(res)
                 if (!res)
                     return;
                 var html = "";
@@ -67,24 +68,19 @@
                 search_res.innerHTML = s;
             },
             xhrRequest : function (v) {
-                let url = "https://suggestqueries.google.com" +
-                    "/complete/search?client=chrome&q=" + v ;
+                let url = encodeURI("https://suggestqueries.google.com" +
+                    "/complete/search?client=chrome&q=" + v + "&callback=?");
                 xhr = new XMLHttpRequest();
                 xhr.open("GET" , url);
-                xhr.setRequestHeader("Access-Control-Allow-Origin" ,"*");
+                xhr.onreadystatechange = this.googleSuggested();
                 xhr.send(null);
-                console.log(xhr.responseText);
+                //this.googleSuggested(xhr.responseText);
             }
         };
         document.onkeydown = function (e){
             if ( e.code == "Enter"){
                 var v = document.getElementsByClassName("search_bar")[0].value;
                 SearchApi.xhrRequest(v);
-                if (true)
-                    return;
-                crossorigin.src = "https://suggestqueries.google.com" +
-                    "/complete/search?client=chrome&q=" + v + "&callback=SearchApi\n" +
-                    ".googleSuggested";
             }
         }
     </script>
